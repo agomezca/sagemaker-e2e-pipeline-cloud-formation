@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to deploy an S3 bucket and a SageMaker endpoint
+
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub 'my-bucket-${AWS::AccountId}-${AWS::Region}'
+
+  SageMakerEndpoint:
+    Type: 'AWS::SageMaker::Endpoint'
+    Properties:
+      EndpointName: 'my-sagemaker-endpoint'
+      EndpointConfigName: !Ref SageMakerEndpointConfig
+
+  SageMakerEndpointConfig:
+    Type: 'AWS::SageMaker::EndpointConfig'
+    Properties:
+      EndpointConfigName: 'my-sagemaker-endpoint-config'
+      ProductionVariants:
+        - VariantName: 'AllVariants'
+          ModelName: 'my-sagemaker-model'
+          InstanceType: 'ml.m5.large'
+          InitialInstanceCount: 1
